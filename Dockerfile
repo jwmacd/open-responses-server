@@ -57,7 +57,11 @@ RUN echo '#!/bin/sh\nexec uvicorn open_responses_server.server_entrypoint:app --
 # Create non-root user for security and set permissions
 RUN adduser --disabled-password --gecos "" appuser && \
     chown -R appuser:appuser /app/log && \
-    chown appuser:appuser /app/entrypoint.sh
+    chown appuser:appuser /app/entrypoint.sh && \
+    # Create SQLite database file with proper permissions for MCP server
+    touch /app/test.db && \
+    chown appuser:appuser /app/test.db && \
+    chmod 664 /app/test.db
 USER appuser
 
 # Use JSON array format for CMD with entrypoint script
