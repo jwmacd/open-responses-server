@@ -399,12 +399,9 @@ async def proxy_endpoint(request: Request, path_name: str):
     headers = {k: v for k, v in request.headers.items() if k.lower() != 'host'}
 
     try:
-        # Check if base_url already ends with /v1 to avoid double /v1 path
+        # Just use the base URL directly without adding /v1
         base_url_str = str(client.base_url).rstrip('/')
-        if base_url_str.endswith('/v1'):
-            url = f"{base_url_str}/{path_name}"
-        else:
-            url = f"{base_url_str}/v1/{path_name}"
+        url = f"{base_url_str}/{path_name}"
         
         # Handle streaming for the proxy
         is_stream = False
