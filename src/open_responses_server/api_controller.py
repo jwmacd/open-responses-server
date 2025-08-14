@@ -399,7 +399,11 @@ async def proxy_endpoint(request: Request, path_name: str):
     headers = {k: v for k, v in request.headers.items() if k.lower() != 'host'}
 
     try:
-        url = f"{client.base_url}/v1/{path_name}"
+        # If path already starts with v1/, don't add another /v1/
+        if path_name.startswith('v1/'):
+            url = f"{client.base_url}/{path_name}"
+        else:
+            url = f"{client.base_url}/v1/{path_name}"
         
         # Handle streaming for the proxy
         is_stream = False
